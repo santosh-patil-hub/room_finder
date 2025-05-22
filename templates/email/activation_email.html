@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .btn {
+      padding: 10px 20px;
+      background: #1d4ed8;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Hello {{ user.username }} 👋</h2>
+  <p>Click the button below to activate your RoomFinder account:</p>
+  <a href="{{ activation_link }}" class="btn">Activate Now</a>
+</body>
+</html>
