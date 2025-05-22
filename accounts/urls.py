@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import RegisterView, ActivateUserView, LoginView
+from .views import RegisterView, LoginView, VerifyEmailView
 
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),
-    path('activate/<uidb64>/<token>/', ActivateUserView.as_view(), name='activate'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('register/', RegisterView.as_view(), name='api_register'),
+    path('login/', LoginView.as_view(), name='api_login'),
+    path('verify-email/<uidb64>/<token>/', VerifyEmailView.as_view(), name='verify_email'),
 ]
