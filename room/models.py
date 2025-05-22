@@ -2,6 +2,11 @@
 
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
+import uuid
+
+def room_image_upload_path(instance, filename):
+    return f'rooms/{instance.owner.id}/{filename}'
 
 class Room(models.Model):
     ROOM_TYPES = [
@@ -32,6 +37,7 @@ class Room(models.Model):
 
     # 1. Title
     title = models.CharField(max_length=255, help_text="House, apartment, or building name")
+    slug = models.SlugField(unique=True, blank=True)
 
     # 2. Address
     city = models.CharField(max_length=100)
@@ -70,10 +76,25 @@ class Room(models.Model):
 
     # 10. Availability
     is_available = models.BooleanField(default=True, help_text="Is the room currently available?")
+    # 10. Images
+     # New image fields
+    image1 = models.ImageField(upload_to=room_image_upload_path)
+    image2 = models.ImageField(upload_to=room_image_upload_path)
+    image3 = models.ImageField(upload_to=room_image_upload_path, blank=True, null=True)
+    image4 = models.ImageField(upload_to=room_image_upload_path, blank=True, null=True)
+    image5 = models.ImageField(upload_to=room_image_upload_path, blank=True, null=True)
 
 
     # 11. Created date
     created_at = models.DateTimeField(auto_now_add=True)
+
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            unique_suffix = str(uuid.uuid4())[:8]  # short unique id
+            self.slug = f"{base_slug}-{unique_suffix}"
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} - {self.city}"
